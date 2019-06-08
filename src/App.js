@@ -1,24 +1,49 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React from "react";
+import Header from "./components/Header/Header";
+import { Switch, Route } from "react-router-dom";
+import AuthContainer from "./components/Auth/AuthContainer";
+import userFetch from "./hooks/fetchUser";
+import "./App.scss";
 
 function App() {
+  const [user, setUser] = userFetch("/api/user");
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <Header />
+
+      <Switch>
+        {user ? (
+          <>
+            <Route
+              exact
+              path="/"
+              render={() => {
+                return <div>Home</div>;
+              }}
+            />
+            <Route
+              path="/page1"
+              render={() => {
+                return <div>Page 1</div>;
+              }}
+            />
+            <Route
+              path="/page2"
+              render={() => {
+                return <div>Page 2</div>;
+              }}
+            />
+            <Route
+              path="/page3"
+              render={() => {
+                return <div>Page 3</div>;
+              }}
+            />
+          </>
+        ) : (
+          <AuthContainer />
+        )}
+      </Switch>
     </div>
   );
 }
