@@ -1,6 +1,9 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 
+import { useSelector, useDispatch } from "react-redux";
+// import { setUser } from "../../dux/reducer";
+
 function Button({ label, action, className }) {
   return (
     <button className={className} onClick={() => action()}>
@@ -9,7 +12,8 @@ function Button({ label, action, className }) {
   );
 }
 
-function Login({ setUser, className }) {
+function Login({ className }) {
+  const dispatch = useDispatch();
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
@@ -18,11 +22,12 @@ function Login({ setUser, className }) {
     setLoading(true);
     axios.post("/api/login", { username, password }).then(res => {
       setLoading(false);
+      dispatch({ type: "SET_USER", payload: res.data });
     });
   }
 
   return (
-    <div className={className}>
+    <form onSubmit={e => e.preventDefault()} className={className}>
       <div>
         <label>Username: </label>
         <input
@@ -37,12 +42,17 @@ function Login({ setUser, className }) {
           onChange={({ target: { value } }) => setPassword(value)}
         />
       </div>
-      <Button action={login} label="Login" className="auth-btn" />
-    </div>
+      <Button
+        action={login}
+        label={loading ? "Logging in.." : "Login"}
+        className="auth-btn"
+      />
+    </form>
   );
 }
 
 function Register({ className }) {
+  const dispatch = useDispatch();
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -55,6 +65,7 @@ function Register({ className }) {
     setLoading(true);
     axios.post("/api/register", { username, password, email }).then(res => {
       setLoading(false);
+      dispatch({ type: "SET_USER", payload: res.data });
     });
   }
 
@@ -65,7 +76,7 @@ function Register({ className }) {
     }
   });
   return (
-    <div className={className}>
+    <form onSubmit={e => e.preventDefault()} className={className}>
       <div>
         <label>Username: </label>
         <input
@@ -101,11 +112,11 @@ function Register({ className }) {
         action={
           passwordMatch ? register : () => setMessage("passwords dont match")
         }
-        label="Register"
+        label={loading ? "Logging in.." : "Register"}
         className="auth-btn"
       />
       <span>{message}</span>
-    </div>
+    </form>
   );
 }
 
@@ -145,7 +156,7 @@ function AuthContainer() {
   );
 }
 
-export default function AuthPageContainer() {
+function AuthPageContainer() {
   return (
     <div className="auth-container">
       <div>
@@ -154,3 +165,5 @@ export default function AuthPageContainer() {
     </div>
   );
 }
+
+export default AuthPageContainer;

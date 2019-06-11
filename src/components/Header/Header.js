@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { NavLink } from "react-router-dom";
+import { useSelector } from "react-redux";
 import fetchUser from "../../hooks/fetchUser";
 
 function LoggedInLinks(props) {
@@ -13,35 +14,12 @@ function LoggedInLinks(props) {
   );
 }
 
-function AuthLinks(props) {
-  return (
-    <div>
-      <NavLink
-        to={{
-          pathname: "/auth",
-          state: { auth: "login" }
-        }}
-      >
-        Login
-      </NavLink>
-      <NavLink
-        to={{
-          pathname: "/auth",
-          state: { auth: "register" }
-        }}
-      >
-        Register
-      </NavLink>
-    </div>
-  );
-}
-
 function Header(props) {
-  const [user] = fetchUser("/api/user");
+  const user = useSelector(state => state.user);
   return (
     <header className="main-header">
       <div>
-        <div>{user ? <LoggedInLinks /> : <AuthLinks />}</div>
+        <div>{user ? <LoggedInLinks /> : null}</div>
       </div>
     </header>
   );

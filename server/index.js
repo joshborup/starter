@@ -36,7 +36,7 @@ mongoose
 
 app.post("/api/register", registerUser);
 app.post("/api/login", login);
-app.post("/api/user", userInfo);
+app.get("/api/user", userInfo);
 
 // data endpoints
 app
