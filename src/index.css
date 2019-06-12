@@ -134,5 +134,8 @@ html {
 
 * {
   box-sizing: inherit;
-  outline-color: rgba(255, 255, 255, 0.1);
+}
+
+:focus {
+  outline: rgb(0, 132, 255) auto 2px;
 }

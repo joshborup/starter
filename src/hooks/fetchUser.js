@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import axios from "axios";
 
@@ -18,7 +18,7 @@ export default function FetchUser(url) {
         dispatch({ type: "SET_USER", payload: res.data });
       })
       .catch(err => console.log(err));
-  }, []);
+  }, [dispatch]);
   console.log(user);
   return [user, getUser];
 }

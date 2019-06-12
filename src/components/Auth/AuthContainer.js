@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { customeErrMessage } from "../../utils/frontUtils";
+import { FaSignInAlt, FaUserPlus } from "react-icons/fa";
+import ReactLoading from "react-loading";
 import axios from "axios";
 
 import { useDispatch } from "react-redux";
@@ -42,16 +44,18 @@ function Login({ className }) {
   return (
     <form onSubmit={e => e.preventDefault()} className={className}>
       <div>
-        <label>Username: </label>
         <input
+          placeholder="Username"
+          autoComplete="username"
           value={username}
           onChange={({ target: { value } }) => setUsername(value)}
         />
       </div>
       <div>
-        <label>Password: </label>
         <input
+          placeholder="Password"
           type="password"
+          autoComplete="current-password"
           value={password}
           onChange={({ target: { value } }) => setPassword(value)}
         />
@@ -67,7 +71,24 @@ function Login({ className }) {
                 );
               }
         }
-        label={loading ? "Logging in..." : "Login"}
+        label={
+          loading ? (
+            <div>
+              <span>Logging In</span>{" "}
+              <ReactLoading
+                type={"bars"}
+                width="20px"
+                height="20px"
+                color="#fff"
+              />
+            </div>
+          ) : (
+            <div>
+              <span>Login</span>
+              <FaSignInAlt />
+            </div>
+          )
+        }
         className="auth-btn"
       />
       <span>{message}</span>
@@ -86,11 +107,11 @@ function Register({ className }) {
   const [message, setMessage] = useState("");
 
   function register() {
+    let current = true;
     setLoading(true);
     axios
       .post("/api/register", { username, password, email })
       .then(res => {
-        let current = true;
         if (current) {
           setLoading(false);
           dispatch({ type: "SET_USER", payload: res.data });
@@ -113,36 +134,40 @@ function Register({ className }) {
     if (password === secondTimePassword) {
       setPasswordMatch(true);
     }
-  });
+  }, [password, secondTimePassword]);
   return (
     <form onSubmit={e => e.preventDefault()} className={className}>
       <div>
-        <label>Username: </label>
         <input
+          placeholder="Username"
+          autoComplete="username"
           value={username}
           onChange={({ target: { value } }) => setUsername(value)}
         />
       </div>
       <div>
-        <label>Email: </label>
         <input
+          placeholder="you@example.com"
           type="email"
+          autoComplete="email"
           value={email}
           onChange={({ target: { value } }) => setEmail(value)}
         />
       </div>
       <div>
-        <label>Password: </label>
         <input
           type="password"
+          placeholder="Password"
+          autoComplete="new-password"
           value={password}
           onChange={({ target: { value } }) => setPassword(value)}
         />
       </div>
       <div>
-        <label>Confirm Password: </label>
         <input
           type="password"
+          placeholder="Confirm Password"
+          autoComplete="new-password"
           value={secondTimePassword}
           onChange={({ target: { value } }) => setsecondTimePassword(value)}
         />
@@ -153,7 +178,24 @@ function Register({ className }) {
             ? register
             : () => customeErrMessage(setMessage, "passwords dont match")
         }
-        label={loading ? "Registering.." : "Register"}
+        label={
+          loading ? (
+            <div>
+              <span>Registering</span>{" "}
+              <ReactLoading
+                type={"bars"}
+                width="20px"
+                height="20px"
+                color="#fff"
+              />
+            </div>
+          ) : (
+            <div>
+              <span>Register</span>
+              <FaUserPlus />
+            </div>
+          )
+        }
         className="auth-btn"
       />
       <span>{message}</span>
@@ -196,12 +238,22 @@ function AuthContainer() {
     </div>
   );
 }
-
+function Banner({ mainMessage, subMessage }) {
+  return (
+    <div className="banner">
+      <h1>{mainMessage}</h1>
+      <h2>{subMessage}</h2>
+    </div>
+  );
+}
 function AuthPageContainer() {
   return (
     <div className="auth-container">
-      <div>
-        <AuthContainer />
+      <Banner mainMessage="cool" subMessage="even coola" />
+      <div className="login">
+        <div>
+          <AuthContainer />
+        </div>
       </div>
     </div>
   );
