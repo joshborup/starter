@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
+import { customeErrMessage } from "../../utils/frontUtils";
 import axios from "axios";
 
-import { useSelector, useDispatch } from "react-redux";
-// import { setUser } from "../../dux/reducer";
+import { useDispatch } from "react-redux";
 
 function Button({ label, action, className }) {
   return (
@@ -17,13 +17,20 @@ function Login({ className }) {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
+  const [message, setMessage] = useState("");
 
   function login() {
     setLoading(true);
-    axios.post("/api/login", { username, password }).then(res => {
-      setLoading(false);
-      dispatch({ type: "SET_USER", payload: res.data });
-    });
+    axios
+      .post("/api/login", { username, password })
+      .then(res => {
+        setLoading(false);
+        dispatch({ type: "SET_USER", payload: res.data });
+      })
+      .catch(err => {
+        setLoading(false);
+        customeErrMessage(setMessage, err.response.data);
+      });
   }
 
   return (
@@ -43,10 +50,20 @@ function Login({ className }) {
         />
       </div>
       <Button
-        action={login}
-        label={loading ? "Logging in.." : "Login"}
+        action={
+          username && password
+            ? login
+            : () => {
+                customeErrMessage(
+                  setMessage,
+                  "type anything if you want that button to work"
+                );
+              }
+        }
+        label={loading ? "Logging in..." : "Login"}
         className="auth-btn"
       />
+      <span>{message}</span>
     </form>
   );
 }
@@ -110,7 +127,9 @@ function Register({ className }) {
       </div>
       <Button
         action={
-          passwordMatch ? register : () => setMessage("passwords dont match")
+          passwordMatch
+            ? register
+            : () => customeErrMessage(setMessage, "passwords dont match")
         }
         label={loading ? "Logging in.." : "Register"}
         className="auth-btn"

@@ -1,15 +1,22 @@
 import React, { useEffect, useState } from "react";
 import { NavLink } from "react-router-dom";
-import { useSelector } from "react-redux";
-import fetchUser from "../../hooks/fetchUser";
+import { useSelector, useDispatch } from "react-redux";
+import axios from "axios";
 
 function LoggedInLinks(props) {
+  const dispatch = useDispatch();
+  function logout() {
+    axios.get("/api/logout").then(() => {
+      dispatch({ type: "SET_USER", payload: null });
+    });
+  }
   return (
     <div>
-      <NavLink to="/home">Home</NavLink>
+      <NavLink to="/">Home</NavLink>
       <NavLink to="/page1">Page 1</NavLink>
       <NavLink to="/page2">Page 2</NavLink>
       <NavLink to="/page3">Page 3</NavLink>
+      <button onClick={logout}>Logout</button>
     </div>
   );
 }

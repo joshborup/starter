@@ -8,7 +8,8 @@ const { get, post, put, deleteItem } = require("./controller/controller");
 const {
   login,
   registerUser,
-  userInfo
+  userInfo,
+  logout
 } = require("./controller/authController");
 const { SERVER_PORT, CONNECTION_STRING, SESSION_SECRET } = process.env;
 
@@ -37,6 +38,7 @@ mongoose
 app.post("/api/register", registerUser);
 app.post("/api/login", login);
 app.get("/api/user", userInfo);
+app.get("/api/logout", logout);
 
 // data endpoints
 app
