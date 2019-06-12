@@ -15,12 +15,14 @@ module.exports = {
       email,
       password: hashedPassword
     });
-    user.save((err, newUser) => {
+    user.save(async err => {
       if (err) {
         res.status(400).send(err);
       } else {
-        delete newUser.password;
-        req.session.user = newUser;
+        const authenticatedUser = await User.find({ username })
+          .select({ username: 1, email: 1 })
+          .catch(err => res.status(400).send("incorrect username/password"));
+        req.session.user = authenticatedUser[0];
         res.status(200).send(req.session.user);
       }
     });
@@ -37,9 +39,10 @@ module.exports = {
         .catch(err => res.status(400).send("incorrect username/password"));
 
       if (passwordsMatch) {
-        user[0].password = "";
-        console.log(user[0]);
-        req.session.user = user[0];
+        const authenticatedUser = await User.find({ username })
+          .select({ username: 1, email: 1 })
+          .catch(err => res.status(400).send("incorrect username/password"));
+        req.session.user = authenticatedUser[0];
         res.status(200).send(req.session.user);
       } else {
         res.status(400).send("incorrect username/password");

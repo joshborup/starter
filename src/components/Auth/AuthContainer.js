@@ -24,8 +24,14 @@ function Login({ className }) {
     axios
       .post("/api/login", { username, password })
       .then(res => {
-        setLoading(false);
-        dispatch({ type: "SET_USER", payload: res.data });
+        let current = true;
+        if (current) {
+          setLoading(false);
+          dispatch({ type: "SET_USER", payload: res.data });
+        }
+        return () => {
+          current = false;
+        };
       })
       .catch(err => {
         setLoading(false);
@@ -45,6 +51,7 @@ function Login({ className }) {
       <div>
         <label>Password: </label>
         <input
+          type="password"
           value={password}
           onChange={({ target: { value } }) => setPassword(value)}
         />
@@ -80,10 +87,25 @@ function Register({ className }) {
 
   function register() {
     setLoading(true);
-    axios.post("/api/register", { username, password, email }).then(res => {
-      setLoading(false);
-      dispatch({ type: "SET_USER", payload: res.data });
-    });
+    axios
+      .post("/api/register", { username, password, email })
+      .then(res => {
+        let current = true;
+        if (current) {
+          setLoading(false);
+          dispatch({ type: "SET_USER", payload: res.data });
+        }
+        return () => {
+          current = false;
+        };
+      })
+      .catch(err => {
+        const { message, errmsg } = err.response.data;
+        const errorMessage = message || errmsg;
+        setLoading(false);
+        console.dir(err);
+        customeErrMessage(setMessage, errorMessage);
+      });
   }
 
   useEffect(() => {
@@ -131,7 +153,7 @@ function Register({ className }) {
             ? register
             : () => customeErrMessage(setMessage, "passwords dont match")
         }
-        label={loading ? "Logging in.." : "Register"}
+        label={loading ? "Registering.." : "Register"}
         className="auth-btn"
       />
       <span>{message}</span>
