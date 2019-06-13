@@ -11,7 +11,7 @@ const {
   userInfo,
   logout
 } = require("./controller/authController");
-const { SERVER_PORT, CONNECTION_STRING, SESSION_SECRET } = process.env;
+const { SERVER_PORT, CONNECTION_STRING_LOCAL, SESSION_SECRET } = process.env;
 
 app.use(
   session({
@@ -25,7 +25,10 @@ app.use(
 );
 
 mongoose
-  .connect(CONNECTION_STRING, { useNewUrlParser: true, useCreateIndex: true })
+  .connect(CONNECTION_STRING_LOCAL, {
+    useNewUrlParser: true,
+    useCreateIndex: true
+  })
   .then(() => {
     console.log("connected to mongodb");
   })
@@ -51,5 +54,5 @@ app
   .put(put)
   .delete(deleteItem);
 
-const port = 4000;
+const port = SERVER_PORT;
 app.listen(port, () => console.log(`server listening on ${port}`));

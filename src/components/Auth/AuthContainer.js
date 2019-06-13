@@ -20,6 +20,7 @@ function Login({ className }) {
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
 
   function login() {
     setLoading(true);
@@ -46,6 +47,7 @@ function Login({ className }) {
       <div>
         <input
           placeholder="Username"
+          autoFocus={true}
           autoComplete="username"
           value={username}
           onChange={({ target: { value } }) => setUsername(value)}
@@ -54,11 +56,19 @@ function Login({ className }) {
       <div>
         <input
           placeholder="Password"
-          type="password"
+          type={showPassword ? "text" : "password"}
           autoComplete="current-password"
           value={password}
           onChange={({ target: { value } }) => setPassword(value)}
         />
+        <div className="show-password">
+          <input
+            type="checkbox"
+            checked={showPassword}
+            onChange={() => setShowPassword(!showPassword)}
+          />
+          <label>Show Password</label>
+        </div>
       </div>
       <Button
         action={
@@ -124,7 +134,6 @@ function Register({ className }) {
         const { message, errmsg } = err.response.data;
         const errorMessage = message || errmsg;
         setLoading(false);
-        console.dir(err);
         customeErrMessage(setMessage, errorMessage);
       });
   }
@@ -141,6 +150,7 @@ function Register({ className }) {
         <input
           placeholder="Username"
           autoComplete="username"
+          autoFocus={true}
           value={username}
           onChange={({ target: { value } }) => setUsername(value)}
         />
@@ -249,7 +259,7 @@ function Banner({ mainMessage, subMessage }) {
 function AuthPageContainer() {
   return (
     <div className="auth-container">
-      <Banner mainMessage="cool" subMessage="even coola" />
+      <Banner mainMessage="Title" subMessage="Sub title/Call to action" />
       <div className="login">
         <div>
           <AuthContainer />

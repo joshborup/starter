@@ -1,15 +1,16 @@
 .auth-container {
   display: flex;
   justify-content: center;
-  min-height: calc(100vh - 80px);
+  min-height: 100vh;
   .banner {
     flex: 2;
     display: flex;
     justify-content: center;
     align-items: center;
     flex-direction: column;
-    background: purple;
+    background: rgb(240, 240, 240);
   }
+
   .login {
     flex: 1;
     display: flex;
@@ -20,6 +21,17 @@
       display: flex;
       justify-content: center;
       align-items: flex-start;
+
+      .show-password {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+
+        input {
+          width: initial;
+          margin-right: 5px;
+        }
+      }
     }
   }
   .auth-flex {
@@ -46,7 +58,6 @@
   > div {
     justify-content: center;
     align-items: flex-start;
-    background: palevioletred;
 
     .login-register-container {
       background: white;

@@ -12,6 +12,26 @@ body {
   font-family: $font;
 }
 
+a {
+  text-decoration: none;
+}
+
+h1 {
+  font-size: 42px;
+}
+
+h2 {
+  font-size: 32px;
+}
+
+h3 {
+  font-size: 22px;
+}
+
+h4 {
+  font-size: 16px;
+}
+
 input,
 button {
   min-height: 35px;
@@ -31,5 +51,14 @@ input:focus {
   outline: rgb(0, 26, 51) auto 2px;
 }
 
+.logo {
+  width: 80px;
+
+  img {
+    width: 100%;
+  }
+}
+
 @import "./components/Header/Header.scss";
 @import "./components/Auth/Auth.scss";
+@import "./components/Home/Home.scss";
